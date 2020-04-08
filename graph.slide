@@ -1,0 +1,710 @@
+:# Graph Automata Presentation
+:# CS 594
+:# Brandon Kammerdiener
+
+:include "style.slide"
+
+:use TITLE
+:vspace 0.34
+Graph Automata
+
+:use BODY
+:rjust
+Brandon Kammerdiener
+
+:begin QUESTIONS
+:    use NEXT_SLIDE
+:    use HEADER
+Questions for the Audience
+
+:    use BODY
+1. What is the finite automata 5 tuple?
+
+2. Mondadic second-order (MSO) logic allows quantification of what kind of relation?
+
+3. What does tree width measure?
+:end
+
+:use QUESTIONS
+
+:use NEXT_SLIDE
+:use HEADER
+About Me
+
+:use BULLET1
+Second year Ph.D. Computer Science Student
+
+:use BULLET1
+Advisor: Dr. Michael Jantz
+
+:use BULLET1
+Research topics:
+
+:use BULLET2
+Software systems for heterogeneous memory architectures
+
+:use BULLET3
+Compilers
+
+:use BULLET3
+Operating systems and runtime systems
+
+:use BULLET2
+Application profiling and analysis tools
+
+:use NEXT_SLIDE
+:use HEADER
+About Me
+
+:use BULLET1
+I'm a local.
+
+:point
+:translate 0.05 0.10
+:image images/mountains.jpg 0.5 0.8
+
+:translate 0.6 -0.8
+:image images/feet.jpg 0.35 0.8
+
+:use NEXT_SLIDE
+:use HEADER
+About Me
+
+:use BULLET1
+I like to write my own software tools.
+
+:use BULLET2
+I wrote this slideshow program!
+
+:point
+:translate 0.075 0.05
+:image images/yed.png 0.85 0.9
+
+:use NEXT_SLIDE
+:use HEADER
+About Me
+
+:use BULLET1
+I'm learning how to make fermentable food/drink with my girlfriend.
+
+:point
+:translate 0.05 0.05
+:image images/bread.jpg 0.4 0.8
+:translate 0.6 -0.8
+:image images/beer.jpg 0.35 0.8
+:vspace 0.025
+:rmargin 0.6
+:cjust
+Sourdough
+
+:translate 0.53 -0.115
+Beer!
+
+:use NEXT_SLIDE
+:use HEADER
+About Me
+
+:translate 0.225 -0.02
+:image images/caving.jpg 0.55 0.7
+
+:use NEXT_SLIDE
+:use HEADER
+About Me
+
+:use BULLET1
+:rmargin 0.45
+A Dopo Pizza
+
+:use BULLET1
+:rmargin 0.45
+Paysan Bakery
+
+:use BULLET1
+:rmargin 0.45
+La Herradura
+
+:use BULLET1
+:rmargin 0.45
+Abridged Brewery
+
+:translate 0.48 -0.52
+:image images/pizza.jpg 0.22 0.38
+
+:translate 0.71 -0.38
+:image images/bagels.jpg 0.22 0.38
+
+:translate 0.48 0.02
+:image images/fries.jpg 0.22 0.28
+
+:translate 0.71 -0.28
+:image images/abridged.jpg 0.22 0.28
+
+:use NEXT_SLIDE
+:use HEADER
+Outline
+
+:use BULLET1
+Overview of Automata
+
+:use BULLET1
+Monadic Second-Order Logic
+
+:use BULLET1
+Tree Decomposition and Tree Width
+
+:use BULLET1
+Courcelle's Theorem
+
+:use NEXT_SLIDE
+:use HEADER
+Automata
+
+:use BULLET1
+Abstract state machines
+
+:use BULLET1
+Finite automata, pushdown automata, Turing machines
+
+:use BULLET2
+Will focus on FA for this talk
+
+:point
+
+:vspace 0.075
+:use BULLET1
+FA are defined by a 5-tuple
+:use MATH
+ (Q, ∑, δ, q
+:size 16
+0
+:use BULLET1_TEXT
+:use MATH
+, F)
+
+:use BULLET2
+:rmargin 0.55
+ 
+:use MATH
+Q
+:use BULLET2_TEXT
+ - a finite set of states
+
+:use BULLET2
+:rmargin 0.55
+ 
+:use MATH
+∑
+:use BULLET2_TEXT
+ - a finite set of symbols comprising the 
+:italic
+alphabet
+:no-italic
+ of the input
+
+:use BULLET2
+:rmargin 0.55
+ 
+:use MATH
+δ
+:use BULLET2_TEXT
+ - the transition function, 
+:use MATH
+δ: Q × Σ → Q
+
+:use BULLET2
+:rmargin 0.55
+ 
+:use MATH
+q
+:size 12
+0
+:use BULLET2_TEXT
+ - the initial state
+
+:use BULLET2
+:rmargin 0.55
+ 
+:use MATH
+F
+:use BULLET2_TEXT
+ - the finite set of accepting states, a subset of 
+:use MATH
+Q
+
+:translate 0.45 -0.65
+:image images/dfa1.png 0.5 0.5
+
+:use MATH
+:lmargin 0.53
+:rmargin 0
+:size 20
+L = { w in (0+1)* | w has an even number of 1's }
+
+:use NEXT_SLIDE
+:use HEADER
+Overview
+
+:use BULLET1
+:underline
+Graph automata
+:no-underline
+ - automata defined as a labeled directed graph
+
+:use BULLET1
+Only one change to the defining tuple
+
+:use BULLET2
+ 
+:use MATH
+ (Q, ∑, δ, q
+:size 16
+0
+:use BULLET2_TEXT
+:use MATH
+, F)
+
+:use BULLET2
+ Transition function 
+:use MATH
+δ
+:use BULLET2_TEXT
+ becomes a set of edges, 
+:use MATH
+E
+
+:use BULLET2
+ Each edge in 
+:use MATH
+E
+:use BULLET2_TEXT
+ is directed and labeled with a symbol from 
+:use MATH
+∑
+
+:use BULLET2
+ 
+:use MATH
+E
+:use BULLET2_TEXT
+ is a subset of 
+:use MATH
+Q × Σ × Q
+
+:use NEXT_SLIDE
+:use HEADER
+Walks
+
+:use BODY
+Consider the graph theoretical notion of a walk in a graph automaton.
+
+:use BULLET1
+Define a walk as a sequence of edges of the form 
+:use MATH
+(p, a, q)
+:use BULLET1_TEXT
+ where:
+
+:use BULLET2
+ 
+:use MATH
+p
+:use BULLET2_TEXT
+ is the 
+:italic
+from
+:no-italic
+ vertex.
+
+:use BULLET2
+ 
+:use MATH
+a
+:use BULLET2_TEXT
+ is the 
+:italic
+symbol.
+
+:use BULLET2
+ 
+:use MATH
+q
+:use BULLET2_TEXT
+ is the 
+:italic
+to
+:no-italic
+ vertex.
+
+:use NEXT_SLIDE
+:use HEADER
+Walks
+
+:use BODY
+Now, a 
+:italic
+walk
+:no-italic
+ is defined as a sequence of these labeled edges, 
+:use MATH
+e
+:size 16
+0
+:use BODY
+:use MATH
+ ... e
+:size 16
+n-1
+
+:use BULLET1
+A walk is considered 
+:italic
+accepting
+:italic
+:use BULLET1_TEXT
+ if:
+
+:use BULLET2
+ 
+:use MATH
+p
+:use BULLET2_TEXT
+ from 
+:use MATH
+e
+:size 12
+0
+:use BULLET2_TEXT
+ is 
+:use MATH
+q
+:size 12
+0
+
+:vspace 0.025
+:use BULLET2_TEXT
+:bold
+:lmargin 0.165
+ AND
+
+:use BULLET2
+ 
+:use MATH
+q
+:use BULLET2_TEXT
+ from 
+:use MATH
+e
+:size 12
+n-1
+:use BULLET2_TEXT
+ is in 
+:use MATH
+F
+
+:use NEXT_SLIDE
+:use HEADER
+Strings
+
+:use BODY
+For a finite automata 
+:use MATH
+M
+:use BODY
+, we can say that a string 
+:use MATH
+w
+:use BODY
+ is in 
+:use MATH
+L(M)
+:use BODY
+ iff:
+
+:vspace 0.05
+
+:use MATH
+:cjust
+w in ∑*
+:use BODY
+,
+
+:use BODY
+:cjust
+there exists an accepting walk such that 
+
+:use MATH
+:cjust
+a(e
+:size 16
+i
+:use BODY
+:use MATH
+) = w
+:size 16
+i
+
+:use NEXT_SLIDE
+:use HEADER
+Monadic Second-Order Logic
+
+:use BULLET1
+ 
+:use MATH
+First-order logic:
+:use BULLET1_TEXT
+ statements about properties of a single domain element
+
+:use BULLET1
+ 
+:use MATH
+Second-order logic:
+:use BULLET1_TEXT
+ extends first-order logic to quantify over relations
+
+:translate 0.2 0.07
+:image images/sol.png 0.6 0.15
+
+:use NEXT_SLIDE
+:use HEADER
+Monadic Second-Order Logic
+
+:use BULLET1
+ 
+:use MATH
+Monadic
+:use BULLET1_TEXT
+ second-order logic
+
+:use BULLET2
+Restricts second-order logic to 
+:use MATH
+unary
+:use BULLET2_TEXT
+ relations only
+
+:use BULLET1
+Example MSO sentence of 3-colorability:
+
+:translate 0.05 0.04
+:image images/3color_sol.png 0.9 0.325
+
+:use NEXT_SLIDE
+:use HEADER
+Courcelle's Theorem
+
+:use BULLET1
+:lmargin 0.6
+Bruno Courcelle
+
+:use BULLET1
+:lmargin 0.6
+1990
+
+:translate 0.6 0.05
+:image images/bruno.jpg 0.36 0.4
+
+:use BODY
+:size 40
+:use MATH
+:no-italic
+:rmargin 0.5
+:translate 0 -0.7
+:point
+Every graph property definable in the MSO logic of graphs can be decided in linear time on graphs of bounded treewidth.
+
+:use BODY
+* Independently discovered by Borie, Parker and Tovey in 1992.
+
+:use NEXT_SLIDE
+:use HEADER
+Tree Decomposition
+
+:use BODY
+Defined as a tuple 
+:use MATH
+(T, B)
+
+:use BULLET1
+ 
+:use MATH
+T
+:use BULLET1_TEXT
+ - a tree
+
+:use BULLET1
+ 
+:use MATH
+B
+:use BULLET1_TEXT
+ - a set of 
+:use MATH
+bags
+:use BULLET1_TEXT
+ where each bag is a set of vertices from the original graph
+
+:use BULLET2
+One bag per node in 
+:use MATH
+T
+ 
+:use NEXT_SLIDE
+:use HEADER
+Tree Decomposition
+
+:use BULLET1
+ 
+:use MATH
+Vertex Coverage
+:use BULLET1_TEXT
+ - each vertex in the graph is in at least one bag in the tree decomposition
+
+:use BULLET1
+ 
+:use MATH
+Edge Coverage
+:use BULLET1_TEXT
+ - for each edge in the graph, there must exist a bag with each end of the edge
+
+:use BULLET1
+ 
+:use MATH
+Coherence
+:use BULLET1_TEXT
+ - for any two bags with a connecting path, if they share a vertex, then that vertex is present in all bags on the connecting path
+
+:use NEXT_SLIDE
+:use HEADER
+Tree Decomposition
+
+:vspace 0.05
+
+:translate 0.05 0
+:image images/tree_decomp1.png 0.4 0.55
+
+:translate 0.55 -0.55
+:image images/tree_decomp2.png 0.4 0.55
+
+:use NEXT_SLIDE
+:use HEADER
+Tree Width
+
+:use BULLET1
+The width of a tree decomposition is the size of the largest bag - 1.
+
+:use BULLET1
+The tree width of a graph is minimum width of any possible tree decomposition.
+
+:use BULLET1
+Tree width is a measure of a graph's tree-likeness.
+
+:use NEXT_SLIDE
+:use HEADER
+MSO Logic and Graph Automata
+
+:use BULLET1
+Monadic second-order logic can describe tree-automaton.
+
+:use BULLET1
+Back to 3-colorability:
+
+:translate 0.05 0
+:image images/mso_3color_graph.png 0.9 0.3
+
+:use NEXT_SLIDE
+:use HEADER
+MSO Logic and Graph Automata
+
+:use BODY
+Steps for Courcelle's theorem given a graph, 
+:use MATH
+G
+:use BODY
+ and an MSO description of a graph property, 
+:use MATH
+P
+
+:use BODY
+:lmargin 0.15
+1. Create 
+:use MATH
+T
+:use BODY
+, a tree decomposition of 
+:use MATH
+G.
+
+:use BODY
+:lmargin 0.15
+2. Create a tree automaton, 
+:use MATH
+M
+:use BODY
+ from 
+:use MATH
+P
+:use BODY
+.
+
+
+:use BODY
+:lmargin 0.15
+3. Run 
+:use MATH
+M
+:use BODY
+ on 
+:use MATH
+T
+:use BODY
+ to decide if 
+:use MATH
+G
+:use BODY
+ has property 
+:use MATH
+P
+:use BODY
+.
+
+:use BODY
+Runs in linear time!
+
+:use NEXT_SLIDE
+:use HEADER
+Applications
+
+:use BULLET1
+3-colorability
+
+:use BULLET1
+Computing crossing number
+
+:use BULLET1
+Database theory
+
+:use BULLET1
+Artificial intelligence
+
+:use NEXT_SLIDE
+:use HEADER
+References
+
+:vspace 0.075
+:use BODY
+:rmargin 0
+:size 19
+1. https://cs.stackexchange.com/questions/82994/monadic-second-order-logic-for-dummies
+
+2. https://en.wikipedia.org/wiki/Courcelle%27s_theorem
+
+3. https://en.wikipedia.org/wiki/Monadic_second-order_logic
+
+4. https://en.wikipedia.org/wiki/Tree_(graph_theory)
+
+5. https://www.mi.fu-berlin.de/en/inf/groups/abi/teaching/lectures/lectures_past/WS0910/
+    V____Discrete_Mathematics_for_Bioinformatics__P1/material/scripts/treedecomposition1.pdf
+
+6. https://swt.informatik.uni-freiburg.de/teaching/SS2012/AutomataTheory/Resources/Slides/
+ graphAutomata-SeminarSlides-JanLeike.pdf
+
+:use QUESTIONS

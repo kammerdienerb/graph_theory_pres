@@ -1,0 +1,14 @@
+\documentclass[preview]{standalone}       % What kind of document this is
+
+\usepackage{amsmath}
+
+\begin{document}
+% ∃R,G,B.     (∀v∈V. (v∈R ∨ v∈G ∨ v∈B)) ∧
+%     (∀u,v∈V. ((u∈R ∧ v∈R) ∨ (u∈G ∧ v∈G) ∨ (u∈B ∧ v∈B)) → ¬adj(u,v)).
+
+    \begin{align*}
+        \exists & R,G,B. \\
+        \ & (\forall v\in V.\ (v\in R \lor v\in G \lor v\in B))\ \lor \\
+        & (\forall u,v\in V.\ ((u\in R\land v\in R)\lor ((u\in G\land v\in G)\lor ((u\in B\land v\in B)) \rightarrow \lnot adj(u, v)).
+    \end{align*}
+\end{document}
